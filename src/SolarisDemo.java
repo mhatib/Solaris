@@ -26,7 +26,7 @@ public class SolarisDemo extends JFrame {
 
 		try {
 			SolarisDemo frame = new SolarisDemo();
-			frame.setTitle("Solariseklfehkjhef");
+			frame.setTitle("Solaris");
 			frame.setSize(500, 500);
 			frame.setVisible(true);
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
