@@ -17,6 +17,7 @@ public class SolarisDemo extends JFrame {
 
 	private JButton btn[] = new JButton[100];
 	private JButton btn2[] = new JButton[5];
+	private JButton btn3[] = new JButton[5];
 
 	/**
 	 * Launch the application.
