@@ -5,10 +5,16 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class BattleshipDemo {
@@ -37,7 +43,14 @@ class BattleShipUI extends JFrame{
 	boolean gridIsShip[] = new boolean[100];
 	JPanel gridPanel = new JPanel();
 	JPanel attackPanel = new JPanel();
+	JPanel statsPanel = new JPanel();
 	BattleShipUI enemyUI;
+	int hpv=1;
+	JLabel hpVal = new JLabel(" "+hpv);	
+	int apv=0;
+	JLabel apVal = new JLabel(" "+apv);
+	JButton attackButton = new JButton();
+	JLabel result = new JLabel(" ");
 	
 	public void connect(BattleShipUI enemyUI){
 		this.enemyUI = enemyUI;
@@ -51,6 +64,7 @@ class BattleShipUI extends JFrame{
 
 		gridPanel.setLayout(new GridLayout(10, 10, 0, 0));
 		attackPanel.setLayout(new FlowLayout());
+		statsPanel.setLayout(new FlowLayout());
 
 		Random rdm = new Random();
 
@@ -69,13 +83,40 @@ class BattleShipUI extends JFrame{
 
 		}
 		
-		JButton attackButton = new JButton();
+		statsPanel.add(result);
+		BufferedImage myPicture;
+		try {
+			myPicture = ImageIO.read(new File("src/images/photo.jpg"));
+			JLabel picLabel = new JLabel(new ImageIcon(myPicture));
+			statsPanel.add(picLabel);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+		JLabel player = new JLabel("Player:");
+		JLabel playerName = new JLabel("Hatib");
+		JLabel hp = new JLabel("HP:");
+		JLabel ap = new JLabel("AP:");
+		statsPanel.add(player);
+		statsPanel.add(playerName);
+		
+		statsPanel.add(hp);
+		statsPanel.add(hpVal);
+		statsPanel.add(ap);
+		statsPanel.add(apVal);
+
+
+		
+		
 		attackButton.setText("Attack!");
 		attackButton.addActionListener(new AttackBtnActionListenr(this));
 		attackPanel.add(attackButton);
 		
 		c.add(gridPanel, BorderLayout.CENTER);
 		c.add(attackPanel, BorderLayout.SOUTH);
+		c.add(statsPanel, BorderLayout.NORTH);
 		
 	}
 }
@@ -102,6 +143,16 @@ class AttackBtnActionListenr implements ActionListener{
 				selfUI.enemyUI.gridBtns[i].setBackground(Color.RED);
 				if(selfUI.enemyUI.gridBtns[i].getText().equals("B")){
 					selfUI.enemyUI.gridBtns[i].setText("X");
+					selfUI.apv++;
+					selfUI.hpv--;
+					selfUI.enemyUI.hpVal.setText(""+selfUI.hpv);
+					selfUI.apVal.setText(""+selfUI.apv);
+					if (Integer.parseInt(selfUI.enemyUI.hpVal.getText())==0){
+						selfUI.attackButton.setEnabled(false);
+						selfUI.enemyUI.attackButton.setEnabled(false);
+						selfUI.result.setText("WINNER");
+						selfUI.enemyUI.result.setText("LOSER");
+					}
 				}
 				if(selfUI.gridBtns[i].attacked==true){
 					selfUI.gridBtns[i].setBackground(Color.RED);
